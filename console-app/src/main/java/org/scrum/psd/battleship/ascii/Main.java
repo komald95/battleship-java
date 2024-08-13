@@ -72,6 +72,7 @@ public class Main {
                 System.out.println("                 -\\  \\     /  /-");
                 System.out.println("                   \\  \\   /  /");
             }
+            System.out.println(isHit ? "Yeah ! Nice hit !" : "Miss");
 
             for (Ship ship : myFleet) {
                 if (ship.checkSunk()) {
@@ -85,7 +86,7 @@ public class Main {
                 }
             }
 
-            System.out.println(isHit ? "Yeah ! Nice hit !" : "Miss");
+           
             telemetry.trackEvent("Player_ShootPosition", "Position", position.toString(), "IsHit", Boolean.valueOf(isHit).toString());
 
             position = getRandomPosition();

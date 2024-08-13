@@ -68,6 +68,27 @@ public class GameControllerTest {
         Assert.assertFalse(result);
     }
 
+
+    @Test
+    public void testCheckIsSunk() {
+        List<Ship> ships = GameController.initializeShips();
+        int counter = 0;
+
+        for (Ship ship : ships) {
+            Letter letter = Letter.values()[counter];
+
+            for (int i = 0; i < ship.getSize(); i++) {
+                ship.getPositions().add(new Position(letter, i));
+            }
+
+            counter++;
+        }
+
+        boolean result = ships.get(0).checkSunk();
+
+        Assert.assertFalse(result);
+    }
+
     @Test
     public void testIsShipValidTrue() {
         List<Position> positions = Arrays.asList(new Position(Letter.A, 1), new Position(Letter.A, 1), new Position(Letter.A, 1));
