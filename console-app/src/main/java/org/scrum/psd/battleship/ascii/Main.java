@@ -73,7 +73,7 @@ public class Main {
                 System.out.println("                   \\  \\   /  /");
             }
 
-            for (Ship ship : myFleet) {
+            for (Ship ship : enemyFleet) {
                 if (ship.checkSunk()) {
                     System.out.println(ship.getName()+" is sunk");
                 }
@@ -113,7 +113,7 @@ public class Main {
                 }
             }
 
-            for (Ship ship : enemyFleet) {
+            for (Ship ship : myFleet) {
                 if (! ship.checkSunk()) {
                     System.out.println(ship.getName()+" is afloat");
                 }
