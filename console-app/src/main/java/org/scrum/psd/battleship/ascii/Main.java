@@ -73,9 +73,15 @@ public class Main {
                 System.out.println("                   \\  \\   /  /");
             }
 
-            for (Ship ship : enemyFleet) {
+            for (Ship ship : myFleet) {
                 if (ship.checkSunk()) {
-                    System.out.println("is Sunk");
+                    System.out.println(ship.getName()+" is sunk");
+                }
+            }
+
+            for (Ship ship : enemyFleet) {
+                if (! ship.checkSunk()) {
+                    System.out.println(ship.getName()+" is afloat");
                 }
             }
 
@@ -103,7 +109,13 @@ public class Main {
 
             for (Ship ship : myFleet) {
                 if (ship.checkSunk()) {
-                    System.out.println("is Sunk");
+                    System.out.println(ship.getName()+" is sunk");
+                }
+            }
+
+            for (Ship ship : enemyFleet) {
+                if (! ship.checkSunk()) {
+                    System.out.println(ship.getName()+" is afloat");
                 }
             }
 

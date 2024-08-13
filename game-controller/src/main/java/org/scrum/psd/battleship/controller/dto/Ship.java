@@ -49,7 +49,7 @@ public class Ship {
             if ( ! position.getHit() ) {
                 return false;
             }
-        }
+        }        
         return true;
     }
 
