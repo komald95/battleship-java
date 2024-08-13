@@ -1,5 +1,6 @@
 package org.scrum.psd.battleship.ascii;
 
+import com.microsoft.applicationinsights.core.dependencies.google.gson.JsonParser;
 import org.scrum.psd.battleship.controller.GameController;
 import org.scrum.psd.battleship.controller.dto.Letter;
 import org.scrum.psd.battleship.controller.dto.Position;
@@ -9,6 +10,7 @@ import java.util.*;
 
 import static com.diogonunes.jcolor.Ansi.colorize;
 import static com.diogonunes.jcolor.Attribute.*;
+import static com.diogonunes.jcolor.Attribute.GREEN_TEXT;
 
 public class Main {
     private static List<Ship> myFleet;
@@ -42,16 +44,16 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("\033[2J\033[;H");
-        System.out.println("                  __");
-        System.out.println("                 /  \\");
-        System.out.println("           .-.  |    |");
-        System.out.println("   *    _.-'  \\  \\__/");
-        System.out.println("    \\.-'       \\");
-        System.out.println("   /          _/");
-        System.out.println("  |      _  /\" \"");
-        System.out.println("  |     /_\'");
-        System.out.println("   \\    \\_/");
-        System.out.println("    \" \"\" \"\" \"\" \"");
+        System.out.println(colorize("                  __",BLUE_TEXT()));
+        System.out.println(colorize("                 /  \\",BLUE_TEXT()));
+        System.out.println(colorize("           .-.  |    |",BLUE_TEXT()));
+        System.out.println(colorize("   *    _.-'  \\  \\__/",BLUE_TEXT()));
+        System.out.println(colorize("    \\.-'       \\",BLUE_TEXT()));
+        System.out.println(colorize("   /          _/",BLUE_TEXT()));
+        System.out.println(colorize("  |      _  /\" \"",BLUE_TEXT()));
+        System.out.println(colorize("  |     /_\'",BLUE_TEXT()));
+        System.out.println(colorize("   \\    \\_/",BLUE_TEXT()));
+        System.out.println(colorize("    \" \"\" \"\" \"\" \"",BLUE_TEXT()));
 
         do {
             System.out.println("");
@@ -61,16 +63,7 @@ public class Main {
             boolean isHit = GameController.checkIsHit(enemyFleet, position);
 
             if (isHit) {
-                beep();
-
-                System.out.println("                \\         .  ./");
-                System.out.println("              \\      .:\" \";'.:..\" \"   /");
-                System.out.println("                  (M^^.^~~:.'\" \").");
-                System.out.println("            -   (/  .    . . \\ \\)  -");
-                System.out.println("               ((| :. ~ ^  :. .|))");
-                System.out.println("            -   (\\- |  \\ /  |  /)  -");
-                System.out.println("                 -\\  \\     /  /-");
-                System.out.println("                   \\  \\   /  /");
+                printHit("green");
             }
             System.out.println(isHit ? "Yeah ! Nice hit !" : "Miss");
 
@@ -92,20 +85,10 @@ public class Main {
             position = getRandomPosition();
             isHit = GameController.checkIsHit(myFleet, position);
             System.out.println("");
-            System.out.println(String.format("Computer shoot in %s%s and %s", position.getColumn(), position.getRow(), isHit ? "hit your ship !" : "miss"));
+            System.out.println(String.format(colorize("Computer shoot in %s%s and %s",YELLOW_TEXT()), position.getColumn(), position.getRow(), isHit ? "hit your ship !" : "miss"));
             telemetry.trackEvent("Computer_ShootPosition", "Position", position.toString(), "IsHit", Boolean.valueOf(isHit).toString());
             if (isHit) {
-                beep();
-
-                System.out.println("                \\         .  ./");
-                System.out.println("              \\      .:\" \";'.:..\" \"   /");
-                System.out.println("                  (M^^.^~~:.'\" \").");
-                System.out.println("            -   (/  .    . . \\ \\)  -");
-                System.out.println("               ((| :. ~ ^  :. .|))");
-                System.out.println("            -   (\\- |  \\ /  |  /)  -");
-                System.out.println("                 -\\  \\     /  /-");
-                System.out.println("                   \\  \\   /  /");
-
+                printHit("red");
             }
 
             for (Ship ship : myFleet) {
@@ -125,6 +108,31 @@ public class Main {
 
     private static void beep() {
         System.out.print("\007");
+    }
+
+    public static void printHit(String color){
+        beep();
+
+        if(color.equals("green")) {
+            System.out.println(colorize("                \\         .  ./", GREEN_TEXT()));
+            System.out.println(colorize("              \\      .:\" \";'.:..\" \"   /", GREEN_TEXT()));
+            System.out.println(colorize("                  (M^^.^~~:.'\" \").", GREEN_TEXT()));
+            System.out.println(colorize("            -   (/  .    . . \\ \\)  -", GREEN_TEXT()));
+            System.out.println(colorize("               ((| :. ~ ^  :. .|))", GREEN_TEXT()));
+            System.out.println(colorize("            -   (\\- |  \\ /  |  /)  -", GREEN_TEXT()));
+            System.out.println(colorize("                 -\\  \\     /  /-", GREEN_TEXT()));
+            System.out.println(colorize("                   \\  \\   /  /", GREEN_TEXT()));
+        }
+        else {
+            System.out.println(colorize("                \\         .  ./", RED_TEXT()));
+            System.out.println(colorize("              \\      .:\" \";'.:..\" \"   /", RED_TEXT()));
+            System.out.println(colorize("                  (M^^.^~~:.'\" \").", RED_TEXT()));
+            System.out.println(colorize("            -   (/  .    . . \\ \\)  -", RED_TEXT()));
+            System.out.println(colorize("               ((| :. ~ ^  :. .|))", RED_TEXT()));
+            System.out.println(colorize("            -   (\\- |  \\ /  |  /)  -", RED_TEXT()));
+            System.out.println(colorize("                 -\\  \\     /  /-", RED_TEXT()));
+            System.out.println(colorize("                   \\  \\   /  /", RED_TEXT()));
+        }
     }
 
     protected static Position parsePosition(String input) {
@@ -157,7 +165,7 @@ public class Main {
 
         for (Ship ship : myFleet) {
             System.out.println("");
-            System.out.println(String.format("Please enter the positions for the %s (size: %s)", ship.getName(), ship.getSize()));
+            System.out.println(String.format(colorize("Please enter the positions for the %s (size: %s)",BRIGHT_BLUE_TEXT()), ship.getName(), ship.getSize()));
             for (int i = 1; i <= ship.getSize(); i++) {
                 System.out.println(String.format("Enter position %s of %s (i.e A3):", i, ship.getSize()));
 
