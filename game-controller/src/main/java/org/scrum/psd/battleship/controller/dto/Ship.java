@@ -46,7 +46,7 @@ public class Ship {
 
     public boolean checkSunk(){
         for (Position position : positions) {
-            if ( ! position.isHit() ) {
+            if ( ! position.getHit() ) {
                 return false;
             }
         }
