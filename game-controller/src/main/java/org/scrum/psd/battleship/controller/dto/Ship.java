@@ -44,6 +44,15 @@ public class Ship {
         positions.add(new Position(letter, number));
     }
 
+    public boolean checkSunk(){
+        for (Position position : positions) {
+            if ( ! position.isHit() ) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     // TODO: property change listener implementieren
 
     public boolean isPlaced() {
