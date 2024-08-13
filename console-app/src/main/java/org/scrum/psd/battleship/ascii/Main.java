@@ -59,6 +59,7 @@ public class Main {
             System.out.println("Enter coordinates for your shot :");
             Position position = parsePosition(scanner.next());
             boolean isHit = GameController.checkIsHit(enemyFleet, position);
+
             if (isHit) {
                 beep();
 
@@ -70,6 +71,12 @@ public class Main {
                 System.out.println("            -   (\\- |  \\ /  |  /)  -");
                 System.out.println("                 -\\  \\     /  /-");
                 System.out.println("                   \\  \\   /  /");
+            }
+
+            for (Ship ship : enemyFleet) {
+                if (ship.checkSunk()) {
+                    System.out.println("is Sunk");
+                }
             }
 
             System.out.println(isHit ? "Yeah ! Nice hit !" : "Miss");
@@ -93,6 +100,13 @@ public class Main {
                 System.out.println("                   \\  \\   /  /");
 
             }
+
+            for (Ship ship : myFleet) {
+                if (ship.checkSunk()) {
+                    System.out.println("is Sunk");
+                }
+            }
+
         } while (true);
     }
 
