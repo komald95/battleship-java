@@ -1,6 +1,6 @@
 package org.scrum.psd.battleship.ascii;
 
-import com.microsoft.applicationinsights.core.dependencies.google.gson.JsonParser;
+import com.diogonunes.jcolor.Attribute;
 import org.scrum.psd.battleship.controller.GameController;
 import org.scrum.psd.battleship.controller.dto.Letter;
 import org.scrum.psd.battleship.controller.dto.Position;
@@ -63,7 +63,7 @@ public class Main {
             boolean isHit = GameController.checkIsHit(enemyFleet, position);
 
             if (isHit) {
-                printHit("green");
+                printHit(GREEN_TEXT());
             }
             System.out.println(isHit ? "Yeah ! Nice hit !" : "Miss");
 
@@ -88,7 +88,7 @@ public class Main {
             System.out.println(String.format(colorize("Computer shoot in %s%s and %s",YELLOW_TEXT()), position.getColumn(), position.getRow(), isHit ? "hit your ship !" : "miss"));
             telemetry.trackEvent("Computer_ShootPosition", "Position", position.toString(), "IsHit", Boolean.valueOf(isHit).toString());
             if (isHit) {
-                printHit("red");
+                printHit(RED_TEXT());
             }
 
             for (Ship ship : myFleet) {
@@ -110,29 +110,17 @@ public class Main {
         System.out.print("\007");
     }
 
-    public static void printHit(String color){
+    public static void printHit(Attribute color){
         beep();
 
-        if(color.equals("green")) {
-            System.out.println(colorize("                \\         .  ./", GREEN_TEXT()));
-            System.out.println(colorize("              \\      .:\" \";'.:..\" \"   /", GREEN_TEXT()));
-            System.out.println(colorize("                  (M^^.^~~:.'\" \").", GREEN_TEXT()));
-            System.out.println(colorize("            -   (/  .    . . \\ \\)  -", GREEN_TEXT()));
-            System.out.println(colorize("               ((| :. ~ ^  :. .|))", GREEN_TEXT()));
-            System.out.println(colorize("            -   (\\- |  \\ /  |  /)  -", GREEN_TEXT()));
-            System.out.println(colorize("                 -\\  \\     /  /-", GREEN_TEXT()));
-            System.out.println(colorize("                   \\  \\   /  /", GREEN_TEXT()));
-        }
-        else {
-            System.out.println(colorize("                \\         .  ./", RED_TEXT()));
-            System.out.println(colorize("              \\      .:\" \";'.:..\" \"   /", RED_TEXT()));
-            System.out.println(colorize("                  (M^^.^~~:.'\" \").", RED_TEXT()));
-            System.out.println(colorize("            -   (/  .    . . \\ \\)  -", RED_TEXT()));
-            System.out.println(colorize("               ((| :. ~ ^  :. .|))", RED_TEXT()));
-            System.out.println(colorize("            -   (\\- |  \\ /  |  /)  -", RED_TEXT()));
-            System.out.println(colorize("                 -\\  \\     /  /-", RED_TEXT()));
-            System.out.println(colorize("                   \\  \\   /  /", RED_TEXT()));
-        }
+        System.out.println(colorize("                \\         .  ./", color));
+        System.out.println(colorize("              \\      .:\" \";'.:..\" \"   /", color));
+        System.out.println(colorize("                  (M^^.^~~:.'\" \").", color));
+        System.out.println(colorize("            -   (/  .    . . \\ \\)  -", color));
+        System.out.println(colorize("               ((| :. ~ ^  :. .|))", color));
+        System.out.println(colorize("            -   (\\- |  \\ /  |  /)  -", color));
+        System.out.println(colorize("                 -\\  \\     /  /-", color));
+        System.out.println(colorize("                   \\  \\   /  /", color));
     }
 
     protected static Position parsePosition(String input) {
