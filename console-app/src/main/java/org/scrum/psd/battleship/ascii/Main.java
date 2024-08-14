@@ -35,7 +35,7 @@ public class Main {
         System.out.println(colorize(" \\_________________________________________________________________________|", MAGENTA_TEXT()));
         System.out.println("");
 
-        InitializeGame();
+        InitializeGame(args.length > 0);
 
         StartGame();
     }
@@ -139,15 +139,20 @@ public class Main {
         return position;
     }
 
-    private static void InitializeGame() {
-        InitializeMyFleet();
+    private static void InitializeGame(boolean testMode) {
+        InitializeMyFleet(testMode);
 
         InitializeEnemyFleet();
     }
 
-    private static void InitializeMyFleet() {
+    private static void InitializeMyFleet(boolean testMode) {
         Scanner scanner = new Scanner(System.in);
         myFleet = GameController.initializeShips();
+
+        if (testMode) {
+            myFleet.get(4).getPositions().add(new Position(Letter.C, 5));
+            myFleet.get(4).getPositions().add(new Position(Letter.C, 6));
+        } else {
 
         System.out.println("Please position your fleet (Game board has size from A to H and 1 to 8) :");
 
@@ -161,6 +166,7 @@ public class Main {
                 ship.addPosition(positionInput);
                 telemetry.trackEvent("Player_PlaceShipPosition", "Position", positionInput, "Ship", ship.getName(), "PositionInShip", Integer.valueOf(i).toString());
             }
+        }
         }
     }
 
