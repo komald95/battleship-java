@@ -41,6 +41,7 @@ public class Main {
     }
 
     private static void StartGame() {
+        boolean isGameOver = true;
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("\033[2J\033[;H");
@@ -69,15 +70,24 @@ public class Main {
 
             for (Ship ship : enemyFleet) {
                 if (ship.checkSunk()) {
-                    System.out.println(ship.getName()+" is sunk");
+                    System.out.println(ship.getName() + " is sunk");
                 }
             }
 
+
+            isGameOver = true;
             for (Ship ship : enemyFleet) {
                 if (! ship.checkSunk()) {
                     System.out.println(ship.getName()+" is afloat");
+                    isGameOver = false;
                 }
             }
+
+            if(isGameOver == true){
+                System.out.println("You won!! Congrats!! ");
+               System.exit(0);
+            }
+
 
            
             telemetry.trackEvent("Player_ShootPosition", "Position", position.toString(), "IsHit", Boolean.valueOf(isHit).toString());
@@ -90,7 +100,7 @@ public class Main {
             if (isHit) {
                 printHit(RED_TEXT());
             }
-
+            isGameOver = true;
             for (Ship ship : myFleet) {
                 if (ship.checkSunk()) {
                     System.out.println(ship.getName()+" is sunk");
@@ -99,11 +109,17 @@ public class Main {
 
             for (Ship ship : myFleet) {
                 if (! ship.checkSunk()) {
-                    System.out.println(ship.getName()+" is afloat");
+                    System.out.println(ship.getName() + " is afloat");
+                    isGameOver = false;
                 }
             }
 
-        } while (true);
+            if(isGameOver == true){
+                System.out.println("computer won!! Better luck next time!! ");
+                System.exit(0);
+            }
+
+        } while (isGameOver == false);
     }
 
     private static void beep() {
