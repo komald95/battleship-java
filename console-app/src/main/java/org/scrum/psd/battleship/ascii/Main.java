@@ -43,8 +43,6 @@ public class Main {
             InitializeGame(args.length > 0, true);
         }
 
-        InitializeGame(args.length > 0);
-
         StartGame();
     }
 
@@ -168,7 +166,7 @@ public class Main {
         if(multiPlayer == true) {
             InitializeMyFleet(testMode, enemyFleet);
         }else {
-            InitializeEnemyFleet();
+            InitializeEnemyFleet(testMode);
         }
 
 
