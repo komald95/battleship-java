@@ -162,9 +162,10 @@ public class Main {
     }
 
     private static void InitializeGame(boolean testMode, boolean multiPlayer) {
-        InitializeMyFleet(testMode, myFleet);
+        InitializeMyFleet(testMode, true);
+        System.out.println(myFleet == null);
         if(multiPlayer == true) {
-            InitializeMyFleet(testMode, enemyFleet);
+            InitializeMyFleet(testMode, false);
         }else {
             InitializeEnemyFleet(testMode);
         }
@@ -173,18 +174,23 @@ public class Main {
 
     }
 
-    private static void InitializeMyFleet(boolean testMode, List<Ship> fleet) {
+    private static void InitializeMyFleet(boolean testMode,  boolean ismyFleet) {
         Scanner scanner = new Scanner(System.in);
-        fleet = GameController.initializeShips();
-
+        List<Ship> anyfleet = GameController.initializeShips();
+        System.out.println(anyfleet.size());
+        if(ismyFleet == true) {
+            myFleet =  anyfleet  ;
+        } else {
+            enemyFleet = anyfleet;
+        }
         if (testMode) {
-            fleet.get(4).getPositions().add(new Position(Letter.C, 5));
-            fleet.get(4).getPositions().add(new Position(Letter.C, 6));
+            anyfleet.get(4).getPositions().add(new Position(Letter.C, 5));
+            anyfleet.get(4).getPositions().add(new Position(Letter.C, 6));
         } else {
 
         System.out.println("Please position your fleet (Game board has size from A to H and 1 to 8) :");
 
-        for (Ship ship : fleet) {
+        for (Ship ship : anyfleet) {
             System.out.println("");
             System.out.println(String.format(colorize("Please enter the positions for the %s (size: %s)",BRIGHT_BLUE_TEXT()), ship.getName(), ship.getSize()));
             for (int i = 1; i <= ship.getSize(); i++) {
