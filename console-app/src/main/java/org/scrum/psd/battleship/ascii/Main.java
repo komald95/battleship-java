@@ -19,6 +19,7 @@ public class Main {
     private static final Telemetry telemetry = new Telemetry();
 
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
         telemetry.trackEvent("ApplicationStarted", "Technology", "Java");
         System.out.println(colorize("                                     |__", MAGENTA_TEXT()));
         System.out.println(colorize("                                     |\\/", MAGENTA_TEXT()));
@@ -34,8 +35,14 @@ public class Main {
         System.out.println(colorize("|                        Welcome to Battleship                         BB-61/", MAGENTA_TEXT()));
         System.out.println(colorize(" \\_________________________________________________________________________|", MAGENTA_TEXT()));
         System.out.println("");
+        System.out.println("Enter number of players.. ");
+        int number = scanner.nextInt();
+        if(number == 1){
+            InitializeGame(args.length > 0, false);
+        } else {
+            InitializeGame(args.length > 0, true);
+        }
 
-        InitializeGame(args.length > 0);
 
         StartGame();
     }
@@ -155,24 +162,30 @@ public class Main {
         return position;
     }
 
-    private static void InitializeGame(boolean testMode) {
-        InitializeMyFleet(testMode);
+    private static void InitializeGame(boolean testMode, boolean multiPlayer) {
+        InitializeMyFleet(testMode, myFleet);
+        if(multiPlayer == true) {
+            InitializeMyFleet(testMode, enemyFleet);
+        }else {
+            InitializeEnemyFleet();
+        }
 
-        InitializeEnemyFleet();
+
+
     }
 
-    private static void InitializeMyFleet(boolean testMode) {
+    private static void InitializeMyFleet(boolean testMode, List<Ship> fleet) {
         Scanner scanner = new Scanner(System.in);
-        myFleet = GameController.initializeShips();
+        fleet = GameController.initializeShips();
 
         if (testMode) {
-            myFleet.get(4).getPositions().add(new Position(Letter.C, 5));
-            myFleet.get(4).getPositions().add(new Position(Letter.C, 6));
+            fleet.get(4).getPositions().add(new Position(Letter.C, 5));
+            fleet.get(4).getPositions().add(new Position(Letter.C, 6));
         } else {
 
         System.out.println("Please position your fleet (Game board has size from A to H and 1 to 8) :");
 
-        for (Ship ship : myFleet) {
+        for (Ship ship : fleet) {
             System.out.println("");
             System.out.println(String.format(colorize("Please enter the positions for the %s (size: %s)",BRIGHT_BLUE_TEXT()), ship.getName(), ship.getSize()));
             for (int i = 1; i <= ship.getSize(); i++) {
