@@ -7,7 +7,7 @@ import org.scrum.psd.battleship.controller.dto.Position;
 import org.scrum.psd.battleship.controller.dto.Ship;
 
 import java.util.*;
-
+import java.util.Random;
 import static com.diogonunes.jcolor.Ansi.colorize;
 import static com.diogonunes.jcolor.Attribute.*;
 import static com.diogonunes.jcolor.Attribute.GREEN_TEXT;
@@ -70,15 +70,10 @@ public class Main {
             for (Ship ship : enemyFleet) {
                 if (ship.checkSunk()) {
                     System.out.println(ship.getName()+" is sunk");
-                }
-            }
-
-            for (Ship ship : enemyFleet) {
-                if (! ship.checkSunk()) {
+                } else {
                     System.out.println(ship.getName()+" is afloat");
                 }
             }
-
            
             telemetry.trackEvent("Player_ShootPosition", "Position", position.toString(), "IsHit", Boolean.valueOf(isHit).toString());
 
@@ -149,7 +144,23 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         myFleet = GameController.initializeShips();
 
-        System.out.println("Please position your fleet (Game board has size from A to H and 1 to 8) :");
+        System.out.println("Do you want to place ships manually? (Y/N)");
+        String positionInput = scanner.next();
+
+        while (!positionInput.equals("Y") && !positionInput.equals("N")){
+            System.out.println("Please add correct input");
+            positionInput = scanner.next();
+        }
+
+        if (positionInput.equals("Y")){
+            manualShipPlacement(myFleet);
+        } else {
+            randomizeShipPlacement();
+        }
+    }
+
+    private static void manualShipPlacement(List<Ship> myFleet){
+        Scanner scanner = new Scanner(System.in);
 
         for (Ship ship : myFleet) {
             System.out.println("");
@@ -161,6 +172,49 @@ public class Main {
                 ship.addPosition(positionInput);
                 telemetry.trackEvent("Player_PlaceShipPosition", "Position", positionInput, "Ship", ship.getName(), "PositionInShip", Integer.valueOf(i).toString());
             }
+        }
+    }
+
+    private static void randomizeShipPlacement() {
+        System.out.println("Automatically positioning your fleet (Game board has size from A to H and 1 to 8):");
+
+        Random random = new Random();
+        for (Ship ship : myFleet) {
+            boolean placed = false;
+
+            boolean isHorizontal = false;
+            while (!placed) {
+                // Randomly decide if the ship will be placed horizontally or vertically
+                isHorizontal = random.nextBoolean();
+
+                // Randomly select a starting point on the board
+                char startColumn = (char) ('A' + random.nextInt(8));
+                int startRow = 1 + random.nextInt(8);
+
+                // Check if the ship can be placed without going out of bounds
+                if (isHorizontal) {
+                    if (startColumn + ship.getSize() - 1 <= 'H') {
+                        // Place the ship horizontally
+                        for (int i = 0; i < ship.getSize(); i++) {
+                            String position = "" + (char) (startColumn + i) + startRow;
+                            ship.addPosition(position);
+                            telemetry.trackEvent("Player_PlaceShipPosition", "Position", position, "Ship", ship.getName(), "PositionInShip", Integer.valueOf(i + 1).toString());
+                        }
+                        placed = true;
+                    }
+                } else {
+                    if (startRow + ship.getSize() - 1 <= 8) {
+                        // Place the ship vertically
+                        for (int i = 0; i < ship.getSize(); i++) {
+                            String position = "" + startColumn + (startRow + i);
+                            ship.addPosition(position);
+                            telemetry.trackEvent("Player_PlaceShipPosition", "Position", position, "Ship", ship.getName(), "PositionInShip", Integer.valueOf(i + 1).toString());
+                        }
+                        placed = true;
+                    }
+                }
+            }
+            System.out.println(String.format("Placed the %s at starting position %s %s", ship.getName(), ship.getPositions().toString(), (isHorizontal ? "horizontally" : "vertically")));
         }
     }
 
