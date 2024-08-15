@@ -188,7 +188,7 @@ public class Main {
         System.out.println("Do you want to place ships manually? (Y/N)");
         String positionInput = scanner.next();
 
-        while (!positionInput.equals("Y") && !positionInput.equals("N")){
+        while (!positionInput.equalsIgnoreCase("Y") && !positionInput.equalsIgnoreCase("N")){
             System.out.println("Please add correct input");
             positionInput = scanner.next();
         }
