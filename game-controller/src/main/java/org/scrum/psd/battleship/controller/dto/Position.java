@@ -41,6 +41,11 @@ public class Position {
         this.isHit = isHit;
     }
 
+    @Override
+    public String toString() {
+        return column.name() + row; // Example: "A3"
+    }
+
 
     @Override public boolean equals(Object o) {
         if(o instanceof Position) {

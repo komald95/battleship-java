@@ -11,42 +11,6 @@ public class Board {
     private static char[][] userBoard = new char[BOARD_SIZE][BOARD_SIZE];
     private static char[][] enemyBoard = new char[BOARD_SIZE][BOARD_SIZE];
 
-    public static void showBoard(List<Ship> fleets) {
-        initializeBoard(userBoard);
-        initializeBoard(enemyBoard);
-
-        // Assuming 'myFleet' is populated and available
-        for (Ship ship : fleets) {
-            placeShipOnBoard(userBoard, ship);
-        }
-
-        // Similarly, you would populate enemyBoard with the enemy's ships
-
-//        System.out.println("User Board:");
-//        printBoard(userBoard);
-//
-//        System.out.println("\nEnemy Board:");
-//        printBoard(enemyBoard);
-    }
-
-    // Initialize the board with empty spaces
-    private static void initializeBoard(char[][] board) {
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                board[i][j] = ' ';
-            }
-        }
-    }
-
-    // Place ship on the board
-    private static void placeShipOnBoard(char[][] board, Ship ship) {
-        for (Position position : ship.getPositions()) {
-            int row = position.toString().charAt(1) - '1';
-            int col = position.toString().charAt(0) - 'A';
-            board[row][col] = 'S';
-        }
-    }
-
     public static void printBoard(char[][] board, List<Ship> fleet) {
         // Initialize the board with empty water
         for (int i = 0; i < BOARD_SIZE; i++) {

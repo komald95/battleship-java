@@ -60,6 +60,10 @@ public class Main {
 
         do {
             System.out.println("");
+            System.out.println("Your Fleet :");
+            Board.printBoard(new char[8][8], myFleet);
+            System.out.println("Enemy Fleet :");
+            Board.printBoard(new char[8][8], enemyFleet);
             System.out.println("Player, it's your turn");
             System.out.println("Enter coordinates for your shot :");
             Position position = parsePosition(scanner.next());
@@ -67,10 +71,13 @@ public class Main {
 
             if (isHit) {
                 printHit(GREEN_TEXT());
+                for (Ship ship : enemyFleet) {
+                    ship.removePosition(position);
+                }
+
             }
             System.out.println(isHit ? "Yeah ! Nice hit !" : "Miss");
 
-//            Board.printBoard(new char[8][8], enemyFleet);
 
             for (Ship ship : enemyFleet) {
                 if (ship.checkSunk()) {
@@ -89,9 +96,11 @@ public class Main {
             telemetry.trackEvent("Computer_ShootPosition", "Position", position.toString(), "IsHit", Boolean.valueOf(isHit).toString());
             if (isHit) {
                 printHit(RED_TEXT());
+                for (Ship ship : myFleet) {
+                    ship.removePosition(position);
+                }
             }
 
-            Board.printBoard(new char[8][8], enemyFleet);
 
             for (Ship ship : myFleet) {
                 if (ship.checkSunk()) {
@@ -180,7 +189,7 @@ public class Main {
                     ship.addPosition(positionInput);
                     telemetry.trackEvent("Player_PlaceShipPosition", "Position", positionInput, "Ship", ship.getName(), "PositionInShip", Integer.valueOf(i).toString());
                 } catch (IllegalArgumentException e) {
-                    System.out.println("Invalid position. Please enter again.");
+                    System.out.println(e.getMessage());
                     i--; // Retry the same position
                 }
             }
@@ -248,7 +257,7 @@ public class Main {
         enemyFleet.get(1).getPositions().add(new Position(Letter.E, 6));
         enemyFleet.get(1).getPositions().add(new Position(Letter.E, 7));
         enemyFleet.get(1).getPositions().add(new Position(Letter.E, 8));
-        enemyFleet.get(1).getPositions().add(new Position(Letter.E, 9));
+        enemyFleet.get(1).getPositions().add(new Position(Letter.E, 5));
 
         enemyFleet.get(2).getPositions().add(new Position(Letter.A, 3));
         enemyFleet.get(2).getPositions().add(new Position(Letter.B, 3));

@@ -24,6 +24,7 @@ public class GameController {
             for (Position position : ship.getPositions()) {
                 if (position.equals(shot)) {
                     position.setHit(true);
+
                     return true;
                 }
             }
