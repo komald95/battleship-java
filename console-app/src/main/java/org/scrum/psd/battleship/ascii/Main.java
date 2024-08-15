@@ -22,6 +22,7 @@ public class Main {
     private static final Telemetry telemetry = new Telemetry();
 
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
         telemetry.trackEvent("ApplicationStarted", "Technology", "Java");
         System.out.println(colorize("                                     |__", MAGENTA_TEXT()));
         System.out.println(colorize("                                     |\\/", MAGENTA_TEXT()));
@@ -37,13 +38,18 @@ public class Main {
         System.out.println(colorize("|                        Welcome to Battleship                         BB-61/", MAGENTA_TEXT()));
         System.out.println(colorize(" \\_________________________________________________________________________|", MAGENTA_TEXT()));
         System.out.println("");
-
-        InitializeGame();
-
+        System.out.println("Enter number of players.. ");
+        int number = scanner.nextInt();
+        if(number == 1){
+            InitializeGame( false);
+        } else {
+            InitializeGame(true);
+        }
         StartGame();
     }
 
     private static void StartGame() {
+        boolean isGameOver = true;
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("\033[2J\033[;H");
@@ -78,15 +84,27 @@ public class Main {
             }
             System.out.println(isHit ? "Yeah ! Nice hit !" : "Miss");
 
-
             for (Ship ship : enemyFleet) {
                 if (ship.checkSunk()) {
-                    System.out.println(ship.getName()+" is sunk");
-                } else {
-                    System.out.println(ship.getName()+" is afloat");
+                    System.out.println(ship.getName() + " is sunk");
                 }
             }
-           
+
+
+            isGameOver = true;
+            for (Ship ship : enemyFleet) {
+                if (! ship.checkSunk()) {
+                    System.out.println(ship.getName()+" is afloat");
+                    isGameOver = false;
+                }
+            }
+
+            if(isGameOver == true){
+                System.out.println("You won!! Congrats!! ");
+                System.exit(0);
+            }
+
+
             telemetry.trackEvent("Player_ShootPosition", "Position", position.toString(), "IsHit", Boolean.valueOf(isHit).toString());
 
             position = getRandomPosition();
@@ -150,16 +168,23 @@ public class Main {
         return position;
     }
 
-    private static void InitializeGame() {
-        InitializeMyFleet();
-
-        InitializeEnemyFleet();
+    private static void InitializeGame(boolean multiPlayer) {
+        InitializeMyFleet(true);
+        if(multiPlayer == true) {
+            InitializeMyFleet(false);
+        }else {
+            InitializeEnemyFleet();
+        }
     }
 
-    private static void InitializeMyFleet() {
+    private static void InitializeMyFleet(boolean ismyFleet) {
         Scanner scanner = new Scanner(System.in);
-        myFleet = GameController.initializeShips();
-
+        List<Ship> anyfleet = GameController.initializeShips();
+        if(ismyFleet == true) {
+            myFleet =  anyfleet  ;
+        } else {
+            enemyFleet = anyfleet;
+        }
         System.out.println("Do you want to place ships manually? (Y/N)");
         String positionInput = scanner.next();
 
@@ -168,10 +193,18 @@ public class Main {
             positionInput = scanner.next();
         }
 
-        if (positionInput.equals("Y")){
+        if (positionInput.equalsIgnoreCase("Y")){
+            if(ismyFleet == true) {
             manualShipPlacement(myFleet);
+            } else {
+                manualShipPlacement(enemyFleet);
+            }
         } else {
-            randomizeShipPlacement(myFleet);
+            if(ismyFleet == true) {
+                randomizeShipPlacement(myFleet);
+            } else {
+                randomizeShipPlacement(enemyFleet);
+            }
         }
     }
 
