@@ -2,6 +2,7 @@ package org.scrum.psd.battleship.controller;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.scrum.psd.battleship.controller.dto.Letter;
 import org.scrum.psd.battleship.controller.dto.Position;
 import org.scrum.psd.battleship.controller.dto.Ship;
@@ -98,5 +99,42 @@ public class GameControllerTest {
 
         Assert.assertTrue(result);
     }
+
+    @Test
+    public void testIsShipInputValid() {
+        List<Position> positions = Arrays.asList(new Position(Letter.A, 1), new Position(Letter.A, 2));
+        Ship ship = new Ship("TestShip", 3, positions);
+
+        String actual="";
+        String expected="Position is out of bounds.";
+        String positionInput = "A9";
+
+        try {
+            ship.addPosition(positionInput);
+           } catch (IllegalArgumentException e) {
+            actual = e.getMessage();
+        }
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testIsShipInputDuplicate() {
+        List<Position> positions = Arrays.asList(new Position(Letter.A, 1), new Position(Letter.A, 2));
+        Ship ship = new Ship("TestShip", 3, positions);
+
+        String actual="";
+        String expected="Position already occupied by this ship.";
+        String positionInput = "A1";
+
+        try {
+            ship.addPosition(positionInput);
+        } catch (IllegalArgumentException e) {
+            actual = e.getMessage();
+        }
+
+        Assertions.assertEquals(expected, actual);
+    }
+
 
 }
